@@ -1,0 +1,16 @@
+.hand {
+  cursor: pointer;
+}
+
+.forbidden {
+  cursor: not-allowed;
+}
+
+.h-center {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.self-center {
+  margin: 0 auto;
+}
