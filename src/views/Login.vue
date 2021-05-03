@@ -29,7 +29,7 @@ export default {
     }
 }
 </script>
-<style>
+<style scoped>
 .home {
     height: 90vh;
     display: flex;

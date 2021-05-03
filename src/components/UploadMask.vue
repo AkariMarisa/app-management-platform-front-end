@@ -230,6 +230,10 @@ export default {
         // 如果不存在, 则上传使用新增接口
 
         formData.append(
+          "appInfo.appId",
+          this.appInfo.appId ? this.appInfo.appId : ""
+        );
+        formData.append(
           "appInfo.name",
           this.appInfo.name ? this.appInfo.name : ""
         );

@@ -149,7 +149,20 @@ export default {
     extractAppInfo(app, type) {
       if (type === "android") {
         const { application, versionCode, versionName, icon } = app;
+
+        const { metaData } = application; // TODO 这里的metaData是个数组, 需要从数据中获取 name为 DCLOUD_STREAMAPP_CHANNEL 的值, 然后从中获取 uniapp 的 appid
+        const dcloudStreamappChannel = metaData.find(
+          (e) => e.name === "DCLOUD_STREAMAPP_CHANNEL"
+        );
+
+        const value = dcloudStreamappChannel.value;
+        let appId;
+        if (value.match(new RegExp("\\|", "g")).length == 3) {
+          appId = value.split("|")[1];
+        }
+
         this.appInfo = {
+          appId,
           type: "android",
           name: application.label[0],
           packageName: app.package,
@@ -165,6 +178,7 @@ export default {
           CFBundleShortVersionString,
           MinimumOSVersion,
           icon,
+          marketChannel, // 从中获取 uniapp 的 appid
           mobileProvision,
         } = app;
         if (!mobileProvision || !mobileProvision.Entitlements) {
@@ -178,7 +192,13 @@ export default {
           return;
         }
 
+        let appId;
+        if (marketChannel.match(new RegExp("\\|", "g")).length == 3) {
+          appId = marketChannel.split("|")[1];
+        }
+
         this.appInfo = {
+          appId,
           type: "apple",
           name: CFBundleDisplayName,
           packageName: CFBundleIdentifier,
