@@ -20,10 +20,7 @@
           >
             <template #option="slotProps">
               <div class="option">
-                <em
-                  class="pi"
-                  v-bind:class="slotProps.option.icon"
-                ></em>
+                <em class="pi" v-bind:class="slotProps.option.icon"></em>
               </div>
             </template>
           </SelectButton>
@@ -158,26 +155,7 @@ export default {
       },
       inputDelayTimer: null,
       appDownloadCount: 0,
-      list: [
-        {
-          id: 1,
-          name: "abc",
-          packageName: "abc.com",
-          versionCode: 100,
-          versionName: "1.0.0",
-          icon: require("@/assets/test.jpg"),
-          type: "android",
-        },
-        {
-          id: 2,
-          name: "fff",
-          packageName: "fff.org",
-          versionCode: 101,
-          versionName: "1.0.1",
-          icon: require("@/assets/test.jpg"),
-          type: "apple",
-        },
-      ],
+      list: [],
     };
   },
   created() {
