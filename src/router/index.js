@@ -4,17 +4,18 @@ import Login from '@/views/Login'
 import AppInfo from '@/views/AppInfo'
 import AppDownload from '@/views/AppDownload'
 import NotFound from '@/views/NotFound'
+import store from '@/store/index'
 
 const routes = [
-    {
-        path: '/',
-        name: 'Index',
-        component: Index
-    },
     {
         path: '/Login',
         name: 'Login',
         component: Login
+    },
+    {
+        path: '/',
+        name: 'Index',
+        component: Index
     },
     {
         path: '/AppInfo/:appId',
@@ -37,6 +38,18 @@ const routes = [
 const router = createRouter({
     history: createWebHashHistory(),
     routes
+})
+
+router.beforeEach((to, from, next) => {
+    const publicPages = ['/Login', '/s/:shortUrl']
+    const authRequired = !publicPages.includes(to.path)
+    const loggedIn = store.getters['user/getToken']
+
+    if (authRequired && !loggedIn) {
+        return next('/Login')
+    }
+
+    next()
 })
 
 export default router
