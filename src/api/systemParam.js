@@ -7,3 +7,12 @@ export function getUrlPrefix() {
         }
     })
 }
+
+export function updateUrlPrefix(value) {
+    return request.put('/systemParam', null, {
+        params: {
+            key: 'UrlPrefix',
+            value
+        }
+    })
+}

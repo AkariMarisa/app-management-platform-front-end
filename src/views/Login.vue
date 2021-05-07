@@ -15,43 +15,58 @@
         autocomplete
         placeholder="请输入密码"
       />
+      <!-- 只有开发模式下能看到, 生产版本不允许让用户看到这个信息 -->
+      <div v-if="env === 'development'">
+        <p>默认用户: admin</p>
+        <p>默认密码: 123456</p>
+      </div>
       <Button
         label="登 录"
         @click="toLogin"
         class="p-button-raised p-button-rounded"
       />
     </form>
-
-    <Toast position="top-center" />
+    <BlockUI :blocked="blocked" :fullScreen="true"></BlockUI>
   </div>
 </template>
 <script>
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
-import Toast from "primevue/toast";
+import BlockUI from "primevue/blockui";
+import CryptoJS from "crypto-js";
 
 export default {
-  components: { Button, InputText, Toast },
+  components: { Button, InputText, BlockUI },
   name: "Login",
   data() {
     return {
+      env: process.env["NODE_ENV"],
+      blocked: false,
       userName: "",
       password: "",
+      salt: "librem-paradise",
     };
   },
   methods: {
     toLogin() {
-      // TODO 加密密码
+      this.blocked = true;
+
+      // 加密密码
+      const encryptedPassword = CryptoJS.MD5(
+        this.password + this.salt
+      ).toString();
 
       this.$store
         .dispatch("user/login", {
           username: this.userName,
-          password: this.password,
+          password: encryptedPassword,
         })
         .then(() => {
+          this.blocked = false;
           this.$router.push("/");
         })
         .catch((err) => {
+          this.blocked = false;
           if (err.response) {
             this.$toast.add({
               severity: "error",

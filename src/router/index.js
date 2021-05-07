@@ -42,7 +42,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const publicPages = ['/Login', '/s/:shortUrl']
-    const authRequired = !publicPages.includes(to.path)
+    const authRequired = !publicPages.includes(to.matched[0].path)
     const loggedIn = store.getters['user/getToken']
 
     if (authRequired && !loggedIn) {

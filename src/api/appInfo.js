@@ -30,3 +30,7 @@ export function createAppInfo(data, uploadProgressCallback) {
 export function getAppInfoByShortUrl(params) {
     return request.get('/appInfoByUrl', { params })
 }
+
+export function deleteApp(params) {
+    return request.delete('appInfo', { params })
+}

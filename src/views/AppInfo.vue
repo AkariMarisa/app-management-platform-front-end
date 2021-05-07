@@ -69,7 +69,13 @@
                 icon="pi pi-eye"
                 label="预览"
                 @click="toOverview"
-                class="p-button-raised p-px-6"
+                class="p-button-raised p-button-rounded p-px-3 p-mr-3"
+              />
+              <Button
+                icon="pi pi-trash"
+                label="删除"
+                @click="deleteDisplay = true"
+                class="p-button-raised p-button-rounded p-button-danger p-px-3"
               />
             </div>
           </div>
@@ -138,18 +144,42 @@
       </Timeline>
     </div>
   </div>
-  <Toast position="top-center" />
+
+  <BlockUI :blocked="blocked" :fullScreen="true"></BlockUI>
+
+  <Dialog header="确定" :modal="true" v-model:visible="deleteDisplay">
+    <div>确定要删除此应用吗?</div>
+    <div class="p-mt-2" style="color: #ff0000; font-size: 1.2em">
+      删除操作将删除应用信息及其所有的版本文件.
+    </div>
+    <template #footer>
+      <Button
+        label="确定"
+        icon="pi pi-check"
+        @click="toDelete"
+        class="p-button-danger"
+      />
+      <Button
+        label="取消"
+        icon="pi pi-times"
+        @click="deleteDisplay = false"
+        class="p-button-text"
+        autofocus
+      />
+    </template>
+  </Dialog>
 </template>
 <script>
 import Timeline from "primevue/timeline";
 import Button from "primevue/button";
 import Tooltip from "primevue/tooltip";
 import Textarea from "primevue/textarea";
-import Toast from "primevue/toast";
+import BlockUI from "primevue/blockui";
+import Dialog from "primevue/dialog";
 import math from "@/util/math";
 import { getUrlPrefix } from "@/api/systemParam";
 import { getDownloadCounts } from "@/api/downloadRecord";
-import { getAppInfoById } from "@/api/appInfo";
+import { getAppInfoById, deleteApp } from "@/api/appInfo";
 import {
   getAppUpdateList,
   updateLog,
@@ -160,7 +190,7 @@ import fileDownload from "js-file-download";
 import { toClipboard } from "@soerenmartius/vue3-clipboard";
 
 export default {
-  components: { Timeline, Button, Textarea, Toast },
+  components: { Timeline, Button, Textarea, BlockUI, Dialog },
   directives: {
     tooltip: Tooltip,
   },
@@ -170,6 +200,8 @@ export default {
   },
   data() {
     return {
+      deleteDisplay: false,
+      blocked: false,
       urlPrefix: "",
       appDownloadCount: 0,
       appDownloadUrl: "",
@@ -275,6 +307,28 @@ export default {
     },
     toOverview() {
       this.$router.push("/s/" + this.appInfo.shortUrl);
+    },
+    toDelete() {
+      this.blocked = true;
+      // 删除应用
+      deleteApp({
+        appInfoId: this.appId,
+      })
+        .then(() => {
+          this.blocked = false;
+          this.$router.replace("/");
+        })
+        .catch((err) => {
+          this.blocked = false;
+          if (err.response) {
+            this.$toast.add({
+              severity: "error",
+              summary: "无法下载应用文件",
+              detail: err.response.data,
+              life: 3000,
+            });
+          }
+        });
     },
     toDownloadCurrentVersion(e) {
       const fileExtensionName = e.fileName.split(".")[1];

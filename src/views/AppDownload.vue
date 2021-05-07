@@ -52,7 +52,7 @@
     <div style="font-size: 14px; text-align: center; color: #a9b1b3">
       更新于: {{ appUpdate.createdAt }}
     </div>
-    <div style="font-size: 14px; text-align: center; margin-top: 20px">
+    <div style="font-size: 14px; text-align: center; margin-top: 20px; margin-bottom: 20px">
       <Button
         icon="pi pi-download"
         label="下载安装"
@@ -62,12 +62,10 @@
     </div>
   </div>
 
-  <Toast position="top-center" />
 </template>
 <script>
 import Button from "primevue/button";
 import QrcodeVue from "qrcode.vue";
-import Toast from "primevue/toast";
 import math from "@/util/math";
 import { getUrlPrefix } from "@/api/systemParam";
 import { getAppInfoByShortUrl } from "@/api/appInfo";
@@ -75,7 +73,7 @@ import { downloadFile } from "@/api/appUpdate";
 import fileDownload from "js-file-download";
 
 export default {
-  components: { Button, QrcodeVue, Toast },
+  components: { Button, QrcodeVue },
   name: "AppInfo",
   props: {
     shortUrl: String,
@@ -180,7 +178,7 @@ export default {
             this.$toast.add({
               severity: "error",
               summary: "无法下载应用文件",
-              detail: err.response.data,
+              detail: err.response.status == 404 ? "文件不存在, 请联系管理员" : err.response.data,
               life: 3000,
             });
           }

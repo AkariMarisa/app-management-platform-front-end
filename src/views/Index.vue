@@ -54,12 +54,8 @@
         <p class="p-ml-3 p-text-bold">应用列表</p>
         <div class="p-grid p-mx-1 p-py-1">
           <!-- 每个应用卡片 -->
-          <div
-            class="p-col-4 flipcard-3d"
-            v-for="(item, index) of list"
-            :key="index"
-          >
-            <div class="flipcard">
+          <div class="p-col-4" v-for="(item, index) of list" :key="index">
+            <div class="flipcard flipcard-3d">
               <div class="inner-card">
                 <!-- 翻转正面 -->
                 <Card class="flipcard-front hand">
@@ -124,8 +120,6 @@
       <!-- 拖拽文件遮照 -->
       <DragnDrop />
     </div>
-
-    <Toast position="top-center" />
   </div>
 </template>
 
@@ -135,13 +129,12 @@ import InputText from "primevue/inputtext";
 import Card from "primevue/card";
 import Button from "primevue/button";
 import DragnDrop from "@/components/DragnDrop";
-import Toast from "primevue/toast";
 import { getDownloadCounts } from "@/api/downloadRecord";
 import { getAppInfoList } from "@/api/appInfo";
 
 export default {
   name: "Index",
-  components: { SelectButton, InputText, Card, Button, DragnDrop, Toast },
+  components: { SelectButton, InputText, Card, Button, DragnDrop },
   data() {
     return {
       selectedPlatform: null,
@@ -327,6 +320,10 @@ export default {
 .flipcard:hover .inner-card {
   transform: rotateY(180deg);
 }
+.flipcard-front {
+  background-color: #ffffff;
+  backface-visibility: hidden;
+}
 .flipcard-back {
   position: absolute;
   top: 0;
@@ -335,6 +332,10 @@ export default {
   border-radius: 3px;
   background: #ffffff;
   transform: rotateY(180deg);
+  backface-visibility: hidden;
+  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 3px 0 rgba(0, 0, 0, 0.12);
+  z-index: 3;
 }
 .app-op {
   display: flex;

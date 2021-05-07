@@ -150,7 +150,7 @@ export default {
       if (type === "android") {
         const { application, versionCode, versionName, icon } = app;
 
-        const { metaData } = application; // TODO 这里的metaData是个数组, 需要从数据中获取 name为 DCLOUD_STREAMAPP_CHANNEL 的值, 然后从中获取 uniapp 的 appid
+        const { metaData } = application; // 这里的metaData是个数组, 需要从数据中获取 name为 DCLOUD_STREAMAPP_CHANNEL 的值, 然后从中获取 uniapp 的 appid
         const dcloudStreamappChannel = metaData.find(
           (e) => e.name === "DCLOUD_STREAMAPP_CHANNEL"
         );
