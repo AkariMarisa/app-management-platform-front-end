@@ -6,7 +6,12 @@
   >
     <!-- 路由链接 -->
     <div class="links">
-      <router-link to="/">首页</router-link>
+      <router-link to="/">
+        <div class="home-link">
+          <img src="@/assets/logo.png" class="home-logo" />
+          <div class="home-tag">XXX分发平台</div>
+        </div>
+      </router-link>
     </div>
     <!-- 用户中心 -->
     <div class="user-center hand">
@@ -333,9 +338,43 @@ export default {
   justify-content: space-between;
   width: 1000px;
   margin: 0 auto;
+  background-color: #ffffff;
 }
 .links {
   margin-left: 20px;
+}
+.links a:link {
+  text-decoration: none;
+  color: #38393f;
+}
+.links a:visited {
+  text-decoration: none;
+  color: #38393f;
+}
+.links a:hover {
+  text-decoration: none;
+  color: #38393f;
+}
+.links a:active {
+  text-decoration: none;
+  color: #38393f;
+}
+.links .home-link {
+  display: flex;
+}
+.links .home-logo {
+  width: 64px;
+  height: 64px;
+}
+.links .home-tag {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  font-size: 1.2em;
+  font-weight: 600;
+  margin-left: 12px;
+  color: #777777;
 }
 .user-center {
   margin-right: 20px;

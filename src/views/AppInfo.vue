@@ -424,6 +424,9 @@ export default {
 <style scoped>
 .root {
   background-color: #f8f8f8;
+  min-height: calc(100vh - 64px);
+  min-width: 1000px;
+  margin: 0 auto;
 }
 .top-box {
   background-color: #ffffff;
@@ -485,7 +488,7 @@ export default {
 .triangle {
   position: absolute;
   top: -13px;
-  left: 32px;
+  left: 56px;
   width: 24px;
   height: 24px;
   border: 1px solid #e7e7e7;

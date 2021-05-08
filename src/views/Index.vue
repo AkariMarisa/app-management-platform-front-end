@@ -1,10 +1,10 @@
 <template>
   <div class="root">
     <div class="home">
-      <div class="p-text-center p-text-bold p-py-5" style="font-size: 1.3rem">
+      <!-- <div class="p-text-center p-text-bold p-pb-5" style="font-size: 1.3rem">
         欢迎使用XXX分发平台
-      </div>
-      <div class="p-text-center p-text-bold p-pb-5" style="color: #b0b0b0">
+      </div> -->
+      <div class="p-text-center p-text-bold p-pb-3" style="color: #b0b0b0">
         <em class="pi pi-info-circle p-mr-2"></em>拖入文件到页面进行上传
       </div>
 
@@ -253,7 +253,7 @@ export default {
 }
 .home {
   background: #ffffff;
-  min-height: calc(100vh - 21px);
+  min-height: calc(100vh - 64px);
   width: 1000px;
   margin: 0 auto;
 }
