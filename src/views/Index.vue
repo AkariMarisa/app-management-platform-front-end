@@ -129,6 +129,7 @@ import InputText from "primevue/inputtext";
 import Card from "primevue/card";
 import Button from "primevue/button";
 import DragnDrop from "@/components/DragnDrop";
+import moment from "moment";
 import { getDownloadCounts } from "@/api/downloadRecord";
 import { getAppInfoList } from "@/api/appInfo";
 
@@ -158,7 +159,10 @@ export default {
   methods: {
     getDownloadCount() {
       // 加载当前所有应用的下载总量
-      getDownloadCounts()
+      const currentDate = moment().format("YYYY-MM-DD");
+      getDownloadCounts({
+        currentDate,
+      })
         .then((resp) => {
           this.appDownloadCount = resp.data;
         })
