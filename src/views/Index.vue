@@ -144,19 +144,36 @@ export default {
         { name: "android", icon: "pi-android" },
       ],
       search: {
+        lastId: null,
         platforms: [],
         appName: "",
       },
+      scrollDelayTimer: null,
       inputDelayTimer: null,
       appDownloadCount: 0,
       list: [],
     };
   },
+  mounted() {
+    document.addEventListener("scroll", this.infiniteScroll);
+  },
   created() {
     this.getDownloadCount();
     this.loadAppList();
   },
+  beforeUnmount() {
+    document.removeEventListener("scroll", this.infiniteScroll);
+  },
   methods: {
+    infiniteScroll() {
+      clearTimeout(this.scrollDelayTimer);
+
+      this.scrollDelayTimer = setTimeout(() => {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+          this.loadAppList(this.buildRequestParam());
+        }
+      }, 500);
+    },
     getDownloadCount() {
       // 加载当前所有应用的下载总量
       const currentDate = moment().format("YYYY-MM-DD");
@@ -177,12 +194,18 @@ export default {
           }
         });
     },
-    loadAppList(params) {
+    loadAppList(params = {}) {
+      if (this.search.lastId) {
+        params.lastId = this.search.lastId;
+      }
+
       // 加载当前所有app列表
       getAppInfoList(params)
         .then((resp) => {
-          this.list = [];
-          for (const appInfo of resp.data) {
+          const { data } = resp;
+          for (let i = 0; i < data.length; i++) {
+            const appInfo = data[i];
+
             this.list.push({
               id: appInfo.id,
               name: appInfo.name,
@@ -194,6 +217,10 @@ export default {
               shortUrl: appInfo.shortUrl,
               currentUpdate: appInfo.currentUpdate,
             });
+
+            if (i === data.length - 1) {
+              this.search.lastId = appInfo.id;
+            }
           }
         })
         .catch((err) => {
@@ -212,6 +239,10 @@ export default {
     },
     toDownload(e) {
       this.$router.push("/s/" + e.shortUrl);
+    },
+    clearAppInfoList() {
+      this.search.lastId = null;
+      this.list = [];
     },
     buildRequestParam() {
       let platformNames = "";
@@ -237,6 +268,8 @@ export default {
       });
       this.search.platforms = platforms;
 
+      this.clearAppInfoList();
+
       // 根据查询条件重新加载应用列表
       this.loadAppList(this.buildRequestParam());
     },
@@ -245,6 +278,7 @@ export default {
       clearTimeout(this.inputDelayTimer);
 
       this.inputDelayTimer = setTimeout(() => {
+        this.clearAppInfoList();
         this.loadAppList(this.buildRequestParam());
       }, 1000);
     },

@@ -48,21 +48,27 @@ export default {
     };
   },
   mounted() {
-    document.addEventListener("dragenter", (e) => {
+    document.addEventListener("dragenter", this.dragEnterHandler);
+    document.addEventListener("dragleave", this.dragLeaveHandler);
+  },
+  beforeUnmount() {
+    document.removeEventListener("dragenter", this.dragEnterHandler);
+    document.removeEventListener("dragleave", this.dragLeaveHandler);
+  },
+  methods: {
+    dragEnterHandler(e) {
       // console.log("drag enter");
       e.preventDefault();
       this.open();
-    });
-    document.addEventListener("dragleave", (e) => {
+    },
+    dragLeaveHandler(e) {
       // console.log("drag leave");
       e.preventDefault();
       const { className } = e.target;
       if (className === "drop-area") {
         this.close();
       }
-    });
-  },
-  methods: {
+    },
     open() {
       if (!this.showDragnDrop) {
         // 需要确认当前上传等遮照是否开启, 只有当前没有其他遮照的情况下才能显示拖入遮照与开启拖入功能

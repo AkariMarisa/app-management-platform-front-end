@@ -387,7 +387,7 @@ export default {
   position: absolute;
   left: 0;
   margin-top: 1em;
-  width: 100%;
+  width: 120%;
 }
 .user-center:hover .dropdown-menu {
   display: block;

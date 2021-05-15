@@ -200,6 +200,8 @@ export default {
   },
   data() {
     return {
+      scrollDelayTimer: null,
+      lastId: null,
       deleteDisplay: false,
       blocked: false,
       urlPrefix: "",
@@ -212,6 +214,9 @@ export default {
       oldLog: "",
     };
   },
+  mounted() {
+    document.addEventListener("scroll", this.infiniteScroll);
+  },
   created() {
     // 获取短链接前缀
     this.getBaseUrlPrefix();
@@ -220,7 +225,19 @@ export default {
     // 获取应用更新列表
     this.getAppUpdates();
   },
+  beforeUnmount() {
+    document.removeEventListener("scroll", this.infiniteScroll);
+  },
   methods: {
+    infiniteScroll() {
+      clearTimeout(this.scrollDelayTimer);
+
+      this.scrollDelayTimer = setTimeout(() => {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+          this.getAppUpdates();
+        }
+      }, 500);
+    },
     getBaseUrlPrefix() {
       // 获取URL前缀
       getUrlPrefix()
@@ -284,9 +301,13 @@ export default {
     getAppUpdates() {
       getAppUpdateList({
         appInfoId: this.appId,
+        lastId: this.lastId,
       })
         .then((resp) => {
-          this.appUpdateList = resp.data;
+          if (resp.data) {
+            this.appUpdateList = this.appUpdateList.concat(resp.data);
+            this.lastId = this.appUpdateList[this.appUpdateList.length - 1].id;
+          }
         })
         .catch((err) => {
           if (err.response) {
