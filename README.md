@@ -1,4 +1,6 @@
-# 应用分发平台
+# 应用分发平台前端
+
+#### 请先访问主仓库[https://github.com/AkariMarisa/app-management-platform](https://github.com/AkariMarisa/app-management-platform)
 
 ## 项目依赖安装
 ```
